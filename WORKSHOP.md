@@ -146,7 +146,19 @@ one support question.  Once you've done that, navigate to Braintrust and look at
 
 ## 4. Run Baseline Evals
 
-Run the starter Braintrust eval:
+Create the starter Braintrust dataset from the seed JSONL file:
+
+```bash
+make create-eval-dataset
+
+# or the direct command
+bt datasets create "support-agent-eval-cases" --file evals/cases.jsonl --env-file .env --project "AIE-Workshop" --no-input
+```
+
+If the dataset already exists from an earlier dry run, you can skip this step.
+
+Run the starter Braintrust eval. The eval loads cases from the Braintrust
+dataset named by `EVAL_DATASET`:
 
 ```bash
 make eval
@@ -375,8 +387,8 @@ English.
 
 ## 9. Turn A Pattern Into An Eval
 
-Starter eval cases live in `evals/cases.jsonl`. Each row has the same top-level
-shape as a Braintrust dataset row:
+Starter eval cases are seeded from `evals/cases.jsonl` into the Braintrust
+dataset named by `EVAL_DATASET`. Each row has the Braintrust dataset shape:
 
 - `input`: the customer message, or an array of `{role, content}` messages
 - `expected`: optional scorer expectations such as `must_use`, `must_not_use`,
@@ -384,8 +396,8 @@ shape as a Braintrust dataset row:
 - `metadata`: execution and reporting context such as `customer_id`, `case_id`,
   and `quality_pattern`
 
-For the local eval, `metadata.customer_id` selects the authenticated seeded
-customer for the agent run.
+For the eval, `metadata.customer_id` selects the authenticated seeded customer
+for the agent run.
 
 The eval invokes scorers from `evals/scorers.py`:
 
@@ -399,20 +411,11 @@ The eval invokes scorers from `evals/scorers.py`:
 To promote a trace pattern into eval coverage:
 
 1. Confirm the source trace is representative and not noise.
-2. Write the expected tool-use requirements.
-3. Decide which unsupported actions should be forbidden.
-4. Add or update a case in `evals/cases.jsonl`.
-5. Create the Braintrust dataset from the local cases:
-
-```bash
-make create-eval-dataset
-```
-
-This uses `bt datasets create` and does not require row ids. If you already
-created the dataset during a dry run, use a different `EVAL_DATASET` name or
-delete the old dataset first.
-
-6. Add a custom scorer only if the scorers pushed in step 5 do not cover the
+2. Add or edit a row in the Braintrust dataset rather than editing local JSONL.
+3. Fill in `expected.must_use`, `expected.must_not_use`, and
+   `expected.must_mention` for the behavior you want to lock in.
+4. Rerun `make eval`.
+5. Add a custom scorer only if the scorers pushed in step 5 do not cover the
    behavior.
 
 ## 10. Improve The Agent

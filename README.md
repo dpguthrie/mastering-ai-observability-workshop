@@ -24,8 +24,8 @@ smoke before the workshop flow. `JUDGE_MODEL` is optional and falls back to
 ## Core Commands
 
 ```bash
-make eval              # run the Braintrust eval
-make create-eval-dataset  # create a Braintrust dataset from evals/cases.jsonl
+make create-eval-dataset  # seed Braintrust eval dataset from evals/cases.jsonl
+make eval              # run the eval from the Braintrust dataset
 make configure-topics  # enable the workshop Topics facets
 make push-scorers      # push hosted scorer definitions to Braintrust
 make import-sample-traces  # import the shared sanitized trace bundle
@@ -37,8 +37,9 @@ make traces-reset      # reseed before writing production-like traces
 make test              # unit and web smoke tests
 ```
 
-The local eval cases in `evals/cases.jsonl` use Braintrust dataset row shape:
-`input`, optional `expected`, and `metadata`.
+The starter eval cases in `evals/cases.jsonl` use Braintrust dataset row shape:
+`input`, optional `expected`, and `metadata`. `make eval` reads from the
+Braintrust dataset named by `EVAL_DATASET`.
 
 Seed data lives in `data/seed.json`. Eval and trace commands reuse an existing
 valid local DB by default; use the reset commands when you want a clean seed.

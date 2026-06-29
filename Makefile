@@ -20,7 +20,7 @@ TOPICS_IDLE_TIME ?= 30s
 TOPICS_WINDOW ?= 24h
 TOPICS_GENERATION_CADENCE ?= 1h
 
-.PHONY: setup seed smoke ready ready-skip-model chat-ui eval create-eval-dataset push-scorers draft-cases traces traces-reset configure-topics prepare-trace-bundle download-sample-traces import-sample-traces test lint clean
+.PHONY: setup seed smoke ready ready-skip-model chat-ui eval eval-reviewed create-eval-dataset push-scorers draft-cases traces traces-reset configure-topics prepare-trace-bundle download-sample-traces import-sample-traces test lint clean
 
 setup:
 	uv sync --extra dev
@@ -41,7 +41,10 @@ chat-ui:
 	uv run python scripts/run_chat_ui.py
 
 eval:
-	bt eval evals/eval_support_agent.py --no-input
+	EVAL_DATASET="$(EVAL_DATASET)" bt eval evals/eval_support_agent.py --no-input
+
+eval-reviewed:
+	AIEWF_EVAL_DATASET="$(DRAFT_DATASET)" AIEWF_EVAL_REVIEW_STATUS=approved bt eval evals/eval_support_agent.py --no-input
 
 create-eval-dataset:
 	bt datasets create "$(EVAL_DATASET)" --file evals/cases.jsonl --env-file .env $(BT_ORG_FLAG) --project "$(BT_PROJECT)" --no-input
