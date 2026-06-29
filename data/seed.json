@@ -1,0 +1,658 @@
+{
+  "schema_version": 1,
+  "description": "Seed data for the Trailhead Outfitters workshop support database.",
+  "tables": {
+    "customers": [
+      {
+        "customer_id": "cus_1001",
+        "email": "maya.chen@example.com",
+        "name": "Maya Chen",
+        "loyalty_tier": "gold",
+        "account_state": "active",
+        "region": "US-CA",
+        "notes": "Often buys running gear; prefers concise updates."
+      },
+      {
+        "customer_id": "cus_1002",
+        "email": "devon.ross@example.com",
+        "name": "Devon Ross",
+        "loyalty_tier": "standard",
+        "account_state": "active",
+        "region": "US-TX",
+        "notes": "Had a delayed shipment in May."
+      },
+      {
+        "customer_id": "cus_1003",
+        "email": "priya.narayan@example.com",
+        "name": "Priya Narayan",
+        "loyalty_tier": "platinum",
+        "account_state": "active",
+        "region": "US-NY",
+        "notes": "High-value account; prefers store credit for small appeasements."
+      },
+      {
+        "customer_id": "cus_1004",
+        "email": "samir.patel@example.com",
+        "name": "Samir Patel",
+        "loyalty_tier": "standard",
+        "account_state": "under_review",
+        "region": "US-WA",
+        "notes": "Two chargeback disputes in the last quarter."
+      },
+      {
+        "customer_id": "cus_1005",
+        "email": "lena.morris@example.com",
+        "name": "Lena Morris",
+        "loyalty_tier": "silver",
+        "account_state": "active",
+        "region": "US-CO",
+        "notes": "Frequently asks about exchanges and gift returns."
+      },
+      {
+        "customer_id": "cus_1006",
+        "email": "omar.haddad@example.com",
+        "name": "Omar Haddad",
+        "loyalty_tier": "gold",
+        "account_state": "active",
+        "region": "US-IL",
+        "notes": "Business traveler; needs delivery-window clarity."
+      },
+      {
+        "customer_id": "cus_1007",
+        "email": "nora.wells@example.com",
+        "name": "Nora Wells",
+        "loyalty_tier": "standard",
+        "account_state": "active",
+        "region": "US-MA",
+        "notes": "Uses apartment parcel lockers; reported one prior delivered-not-received issue."
+      },
+      {
+        "customer_id": "cus_1008",
+        "email": "eli.brooks@example.com",
+        "name": "Eli Brooks",
+        "loyalty_tier": "platinum",
+        "account_state": "active",
+        "region": "US-OR",
+        "notes": "VIP trail ambassador account; escalate repeated fulfillment issues."
+      },
+      {
+        "customer_id": "cus_1009",
+        "email": "talia.reed@example.com",
+        "name": "Talia Reed",
+        "loyalty_tier": "standard",
+        "account_state": "suspended",
+        "region": "US-AZ",
+        "notes": "Account suspended pending payment verification."
+      },
+      {
+        "customer_id": "cus_1010",
+        "email": "ben.alvarez@example.com",
+        "name": "Ben Alvarez",
+        "loyalty_tier": "gold",
+        "account_state": "active",
+        "region": "US-FL",
+        "notes": "Prefers SMS-style brief responses; often buys camping gear."
+      }
+    ],
+    "products": [
+      {
+        "product_id": "prod_2001",
+        "name": "AeroTrail Running Shoe",
+        "category": "footwear",
+        "price_cents": 14800,
+        "return_window_days": 45,
+        "hazmat": 0,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2002",
+        "name": "Nimbus Rain Shell",
+        "category": "outerwear",
+        "price_cents": 21200,
+        "return_window_days": 30,
+        "hazmat": 0,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2003",
+        "name": "Summit Hydration Pack",
+        "category": "gear",
+        "price_cents": 8900,
+        "return_window_days": 30,
+        "hazmat": 0,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2004",
+        "name": "Outlet Merino Base Layer",
+        "category": "outlet",
+        "price_cents": 3900,
+        "return_window_days": 0,
+        "hazmat": 0,
+        "final_sale": 1
+      },
+      {
+        "product_id": "prod_2005",
+        "name": "Lithium Headlamp Battery Kit",
+        "category": "electronics",
+        "price_cents": 2600,
+        "return_window_days": 14,
+        "hazmat": 1,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2006",
+        "name": "Canyon Trekking Pole Pair",
+        "category": "gear",
+        "price_cents": 11900,
+        "return_window_days": 30,
+        "hazmat": 0,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2007",
+        "name": "Alpine Insulated Jacket",
+        "category": "outerwear",
+        "price_cents": 25800,
+        "return_window_days": 30,
+        "hazmat": 0,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2008",
+        "name": "Clearance Trail Sock Bundle",
+        "category": "outlet",
+        "price_cents": 1800,
+        "return_window_days": 0,
+        "hazmat": 0,
+        "final_sale": 1
+      },
+      {
+        "product_id": "prod_2009",
+        "name": "Rechargeable Camp Lantern",
+        "category": "electronics",
+        "price_cents": 6400,
+        "return_window_days": 14,
+        "hazmat": 1,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2010",
+        "name": "TrailChef Stove Fuel Canister",
+        "category": "fuel",
+        "price_cents": 1400,
+        "return_window_days": 0,
+        "hazmat": 1,
+        "final_sale": 1
+      },
+      {
+        "product_id": "prod_2011",
+        "name": "Vista Ultralight Tent",
+        "category": "camping",
+        "price_cents": 32900,
+        "return_window_days": 30,
+        "hazmat": 0,
+        "final_sale": 0
+      },
+      {
+        "product_id": "prod_2012",
+        "name": "Glacier Wool Beanie",
+        "category": "accessories",
+        "price_cents": 3200,
+        "return_window_days": 45,
+        "hazmat": 0,
+        "final_sale": 0
+      }
+    ],
+    "orders": [
+      {
+        "order_id": "ord_3001",
+        "customer_id": "cus_1001",
+        "placed_at": "2026-06-12",
+        "status": "fulfilled",
+        "subtotal_cents": 14800,
+        "shipping_cents": 0,
+        "tax_cents": 1295,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-18"
+      },
+      {
+        "order_id": "ord_3002",
+        "customer_id": "cus_1002",
+        "placed_at": "2026-06-18",
+        "status": "shipped",
+        "subtotal_cents": 30100,
+        "shipping_cents": 900,
+        "tax_cents": 2483,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-25"
+      },
+      {
+        "order_id": "ord_3003",
+        "customer_id": "cus_1003",
+        "placed_at": "2026-05-02",
+        "status": "fulfilled",
+        "subtotal_cents": 3900,
+        "shipping_cents": 700,
+        "tax_cents": 379,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-05-09"
+      },
+      {
+        "order_id": "ord_3004",
+        "customer_id": "cus_1004",
+        "placed_at": "2026-06-20",
+        "status": "pending_review",
+        "subtotal_cents": 17400,
+        "shipping_cents": 0,
+        "tax_cents": 1436,
+        "payment_state": "authorized",
+        "risk_flag": "manual_review",
+        "delivery_promise": "2026-06-28"
+      },
+      {
+        "order_id": "ord_3005",
+        "customer_id": "cus_1001",
+        "placed_at": "2026-06-01",
+        "status": "fulfilled",
+        "subtotal_cents": 2600,
+        "shipping_cents": 500,
+        "tax_cents": 256,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-08"
+      },
+      {
+        "order_id": "ord_3006",
+        "customer_id": "cus_1005",
+        "placed_at": "2026-06-05",
+        "status": "fulfilled",
+        "subtotal_cents": 11900,
+        "shipping_cents": 0,
+        "tax_cents": 981,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-12"
+      },
+      {
+        "order_id": "ord_3007",
+        "customer_id": "cus_1006",
+        "placed_at": "2026-06-19",
+        "status": "label_created",
+        "subtotal_cents": 25800,
+        "shipping_cents": 1200,
+        "tax_cents": 2228,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-27"
+      },
+      {
+        "order_id": "ord_3008",
+        "customer_id": "cus_1007",
+        "placed_at": "2026-06-09",
+        "status": "fulfilled",
+        "subtotal_cents": 1800,
+        "shipping_cents": 500,
+        "tax_cents": 190,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-15"
+      },
+      {
+        "order_id": "ord_3009",
+        "customer_id": "cus_1008",
+        "placed_at": "2026-06-21",
+        "status": "shipped",
+        "subtotal_cents": 34300,
+        "shipping_cents": 0,
+        "tax_cents": 2829,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-26"
+      },
+      {
+        "order_id": "ord_3010",
+        "customer_id": "cus_1009",
+        "placed_at": "2026-06-10",
+        "status": "payment_hold",
+        "subtotal_cents": 6400,
+        "shipping_cents": 700,
+        "tax_cents": 586,
+        "payment_state": "authorized",
+        "risk_flag": "account_suspended",
+        "delivery_promise": "2026-06-18"
+      },
+      {
+        "order_id": "ord_3011",
+        "customer_id": "cus_1010",
+        "placed_at": "2026-06-14",
+        "status": "fulfilled",
+        "subtotal_cents": 34300,
+        "shipping_cents": 0,
+        "tax_cents": 2829,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-20"
+      },
+      {
+        "order_id": "ord_3012",
+        "customer_id": "cus_1002",
+        "placed_at": "2026-05-24",
+        "status": "returned",
+        "subtotal_cents": 3200,
+        "shipping_cents": 500,
+        "tax_cents": 305,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-05-31"
+      },
+      {
+        "order_id": "ord_3013",
+        "customer_id": "cus_1003",
+        "placed_at": "2026-06-16",
+        "status": "cancelled",
+        "subtotal_cents": 32900,
+        "shipping_cents": 0,
+        "tax_cents": 2714,
+        "payment_state": "voided",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-24"
+      },
+      {
+        "order_id": "ord_3014",
+        "customer_id": "cus_1006",
+        "placed_at": "2026-06-23",
+        "status": "processing",
+        "subtotal_cents": 14800,
+        "shipping_cents": 900,
+        "tax_cents": 1295,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-06-30"
+      },
+      {
+        "order_id": "ord_3015",
+        "customer_id": "cus_1008",
+        "placed_at": "2026-05-18",
+        "status": "fulfilled",
+        "subtotal_cents": 25800,
+        "shipping_cents": 0,
+        "tax_cents": 2128,
+        "payment_state": "captured",
+        "risk_flag": null,
+        "delivery_promise": "2026-05-24"
+      }
+    ],
+    "order_items": [
+      {"order_item_id": "oi_4001", "order_id": "ord_3001", "product_id": "prod_2001", "quantity": 1, "unit_price_cents": 14800},
+      {"order_item_id": "oi_4002", "order_id": "ord_3002", "product_id": "prod_2002", "quantity": 1, "unit_price_cents": 21200},
+      {"order_item_id": "oi_4003", "order_id": "ord_3002", "product_id": "prod_2003", "quantity": 1, "unit_price_cents": 8900},
+      {"order_item_id": "oi_4004", "order_id": "ord_3003", "product_id": "prod_2004", "quantity": 1, "unit_price_cents": 3900},
+      {"order_item_id": "oi_4005", "order_id": "ord_3004", "product_id": "prod_2001", "quantity": 1, "unit_price_cents": 14800},
+      {"order_item_id": "oi_4006", "order_id": "ord_3004", "product_id": "prod_2005", "quantity": 1, "unit_price_cents": 2600},
+      {"order_item_id": "oi_4007", "order_id": "ord_3005", "product_id": "prod_2005", "quantity": 1, "unit_price_cents": 2600},
+      {"order_item_id": "oi_4008", "order_id": "ord_3006", "product_id": "prod_2006", "quantity": 1, "unit_price_cents": 11900},
+      {"order_item_id": "oi_4009", "order_id": "ord_3007", "product_id": "prod_2007", "quantity": 1, "unit_price_cents": 25800},
+      {"order_item_id": "oi_4010", "order_id": "ord_3008", "product_id": "prod_2008", "quantity": 1, "unit_price_cents": 1800},
+      {"order_item_id": "oi_4011", "order_id": "ord_3009", "product_id": "prod_2011", "quantity": 1, "unit_price_cents": 32900},
+      {"order_item_id": "oi_4012", "order_id": "ord_3009", "product_id": "prod_2010", "quantity": 1, "unit_price_cents": 1400},
+      {"order_item_id": "oi_4013", "order_id": "ord_3010", "product_id": "prod_2009", "quantity": 1, "unit_price_cents": 6400},
+      {"order_item_id": "oi_4014", "order_id": "ord_3011", "product_id": "prod_2011", "quantity": 1, "unit_price_cents": 32900},
+      {"order_item_id": "oi_4015", "order_id": "ord_3011", "product_id": "prod_2012", "quantity": 1, "unit_price_cents": 3200},
+      {"order_item_id": "oi_4016", "order_id": "ord_3012", "product_id": "prod_2012", "quantity": 1, "unit_price_cents": 3200},
+      {"order_item_id": "oi_4017", "order_id": "ord_3013", "product_id": "prod_2011", "quantity": 1, "unit_price_cents": 32900},
+      {"order_item_id": "oi_4018", "order_id": "ord_3014", "product_id": "prod_2001", "quantity": 1, "unit_price_cents": 14800},
+      {"order_item_id": "oi_4019", "order_id": "ord_3015", "product_id": "prod_2007", "quantity": 1, "unit_price_cents": 25800}
+    ],
+    "shipments": [
+      {
+        "shipment_id": "ship_5001",
+        "order_id": "ord_3001",
+        "carrier": "UPS",
+        "tracking_number": "1Z3001",
+        "status": "delivered",
+        "shipped_at": "2026-06-13",
+        "estimated_delivery": "2026-06-18",
+        "delivered_at": "2026-06-17",
+        "last_scan": "Delivered to front door",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5002",
+        "order_id": "ord_3002",
+        "carrier": "FedEx",
+        "tracking_number": "77123002",
+        "status": "exception",
+        "shipped_at": "2026-06-19",
+        "estimated_delivery": "2026-06-25",
+        "delivered_at": null,
+        "last_scan": "Arrived at regional facility; weather delay",
+        "exception_reason": "weather_delay"
+      },
+      {
+        "shipment_id": "ship_5003",
+        "order_id": "ord_3003",
+        "carrier": "USPS",
+        "tracking_number": "94003003",
+        "status": "delivered",
+        "shipped_at": "2026-05-03",
+        "estimated_delivery": "2026-05-09",
+        "delivered_at": "2026-05-08",
+        "last_scan": "Delivered to parcel locker",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5004",
+        "order_id": "ord_3005",
+        "carrier": "UPS",
+        "tracking_number": "1Z3005",
+        "status": "delivered",
+        "shipped_at": "2026-06-02",
+        "estimated_delivery": "2026-06-08",
+        "delivered_at": "2026-06-07",
+        "last_scan": "Delivered to garage",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5005",
+        "order_id": "ord_3006",
+        "carrier": "UPS",
+        "tracking_number": "1Z3006",
+        "status": "delivered",
+        "shipped_at": "2026-06-06",
+        "estimated_delivery": "2026-06-12",
+        "delivered_at": "2026-06-11",
+        "last_scan": "Delivered to mail room",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5006",
+        "order_id": "ord_3007",
+        "carrier": "FedEx",
+        "tracking_number": "77123007",
+        "status": "label_created",
+        "shipped_at": null,
+        "estimated_delivery": "2026-06-27",
+        "delivered_at": null,
+        "last_scan": "Label created; carrier awaiting package",
+        "exception_reason": "fulfillment_hold"
+      },
+      {
+        "shipment_id": "ship_5007",
+        "order_id": "ord_3008",
+        "carrier": "USPS",
+        "tracking_number": "94003008",
+        "status": "delivered",
+        "shipped_at": "2026-06-10",
+        "estimated_delivery": "2026-06-15",
+        "delivered_at": "2026-06-14",
+        "last_scan": "Delivered to apartment locker 18",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5008",
+        "order_id": "ord_3009",
+        "carrier": "UPS",
+        "tracking_number": "1Z3009",
+        "status": "in_transit",
+        "shipped_at": "2026-06-22",
+        "estimated_delivery": "2026-06-26",
+        "delivered_at": null,
+        "last_scan": "Departed Salt Lake City hub",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5009",
+        "order_id": "ord_3011",
+        "carrier": "FedEx",
+        "tracking_number": "77123011",
+        "status": "delivered",
+        "shipped_at": "2026-06-15",
+        "estimated_delivery": "2026-06-20",
+        "delivered_at": "2026-06-19",
+        "last_scan": "Delivered to side porch",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5010",
+        "order_id": "ord_3012",
+        "carrier": "UPS",
+        "tracking_number": "1Z3012",
+        "status": "delivered",
+        "shipped_at": "2026-05-25",
+        "estimated_delivery": "2026-05-31",
+        "delivered_at": "2026-05-30",
+        "last_scan": "Delivered to front desk",
+        "exception_reason": null
+      },
+      {
+        "shipment_id": "ship_5011",
+        "order_id": "ord_3015",
+        "carrier": "DHL",
+        "tracking_number": "DHL3015",
+        "status": "damaged",
+        "shipped_at": "2026-05-19",
+        "estimated_delivery": "2026-05-24",
+        "delivered_at": null,
+        "last_scan": "Package damaged in transit; carrier inspection opened",
+        "exception_reason": "damaged_in_transit"
+      }
+    ],
+    "returns": [
+      {
+        "return_id": "ret_6001",
+        "order_id": "ord_3012",
+        "product_id": "prod_2012",
+        "status": "received",
+        "reason": "Color not as expected",
+        "created_at": "2026-06-03",
+        "disposition": "restock"
+      },
+      {
+        "return_id": "ret_6002",
+        "order_id": "ord_3006",
+        "product_id": "prod_2006",
+        "status": "in_transit",
+        "reason": "Gift duplicate",
+        "created_at": "2026-06-18",
+        "disposition": "customer_ship_back"
+      }
+    ],
+    "refunds": [
+      {
+        "refund_id": "ref_7001",
+        "order_id": "ord_3012",
+        "amount_cents": 4005,
+        "status": "completed",
+        "reason": "Return received",
+        "created_at": "2026-06-07"
+      },
+      {
+        "refund_id": "ref_7002",
+        "order_id": "ord_3013",
+        "amount_cents": 35614,
+        "status": "voided_authorization",
+        "reason": "Customer cancelled before shipment",
+        "created_at": "2026-06-17"
+      }
+    ],
+    "credits": [
+      {
+        "credit_id": "cred_8001",
+        "customer_id": "cus_1003",
+        "amount_cents": 1500,
+        "reason": "VIP goodwill for delayed final-sale clarification",
+        "created_at": "2026-05-12",
+        "expires_at": "2026-11-12"
+      },
+      {
+        "credit_id": "cred_8002",
+        "customer_id": "cus_1008",
+        "amount_cents": 1000,
+        "reason": "Carrier damage inconvenience",
+        "created_at": "2026-05-26",
+        "expires_at": "2026-11-26"
+      }
+    ],
+    "escalations": [
+      {
+        "escalation_id": "esc_9001",
+        "customer_id": "cus_1004",
+        "order_id": "ord_3004",
+        "reason": "Manual review account requested cancellation",
+        "evidence": "Account has recent chargeback disputes and order payment is only authorized.",
+        "created_at": "2026-06-21",
+        "status": "open"
+      },
+      {
+        "escalation_id": "esc_9002",
+        "customer_id": "cus_1008",
+        "order_id": "ord_3015",
+        "reason": "VIP shipment damaged in transit",
+        "evidence": "Carrier scan says package damaged in transit; customer is platinum ambassador.",
+        "created_at": "2026-05-25",
+        "status": "resolved"
+      }
+    ],
+    "policies": [
+      {
+        "policy_key": "returns",
+        "title": "Returns",
+        "body": "Most non-final-sale items can be returned within the product return window. Final sale items are not returnable. Hazmat items require manual review. Gift returns can be exchanged for store credit after order verification."
+      },
+      {
+        "policy_key": "refunds",
+        "title": "Refunds",
+        "body": "Refunds require a matching paid order and evidence of return eligibility, shipment loss, duplicate charge, or approved goodwill exception. Orders under manual review, suspended accounts, and authorized-only payments cannot be refunded by the agent."
+      },
+      {
+        "policy_key": "shipping",
+        "title": "Shipping exceptions",
+        "body": "If a shipment is delayed but still moving, provide status and next scan. Escalate if no scan for 5 business days, delivered-not-received, damaged shipment, or VIP impact. Label-created orders may need fulfillment investigation before refund or replacement."
+      },
+      {
+        "policy_key": "credits",
+        "title": "Goodwill credits",
+        "body": "Agents may apply up to $15 in store credit for clear inconvenience on active accounts. Higher credits, account review, repeated delivery failures, or chargeback risk require escalation."
+      },
+      {
+        "policy_key": "exchanges",
+        "title": "Exchanges",
+        "body": "Eligible non-final-sale apparel and footwear may be exchanged within the return window if the original item is unused. Hazmat, fuel, and final-sale outlet products are not exchangeable through self-service."
+      },
+      {
+        "policy_key": "identity",
+        "title": "Account and identity boundaries",
+        "body": "Agents may only discuss or act on orders for the authenticated customer. Requests involving another customer's order, payment method, address, or refund require identity verification and escalation."
+      },
+      {
+        "policy_key": "cancellations",
+        "title": "Cancellations and address changes",
+        "body": "Orders can be cancelled or edited only before fulfillment starts. Processing orders may be eligible for an address-change request; shipped orders require carrier intercept or escalation."
+      }
+    ]
+  }
+}

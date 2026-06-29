@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trailhead Support Agent</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app sidebar-collapsed">
+      <aside class="rail" aria-label="Main navigation">
+        <button class="icon-button" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M9 5v14"/></svg>
+        </button>
+        <button class="icon-button active" id="newChatRail" title="New chat" aria-label="New chat">
+          <svg viewBox="0 0 24 24"><path d="M12 5H5v14h14v-7"/><path d="M16 3h5v5"/><path d="M21 3l-9 9"/></svg>
+        </button>
+        <button class="icon-button" id="deleteRail" title="Delete all" aria-label="Delete all">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+        </button>
+        <button class="avatar" id="themeToggle" title="Toggle theme" aria-label="Toggle theme"></button>
+      </aside>
+
+      <aside class="sidebar" id="sidebar">
+        <div class="side-top">
+          <button class="side-action" id="newChat">
+            <svg viewBox="0 0 24 24"><path d="M12 5H5v14h14v-7"/><path d="M16 3h5v5"/><path d="M21 3l-9 9"/></svg>
+            New chat
+          </button>
+          <button class="side-delete" id="deleteAll">
+            <svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+            Delete all
+          </button>
+        </div>
+        <div class="history">
+          <div class="kicker">History</div>
+          <div class="day-label">Today</div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+        <div class="account">
+          <span class="avatar small"></span>
+          <span>Guest</span>
+          <button class="icon-button compact" id="accountMenuButton" aria-label="Account menu">
+            <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+          </button>
+          <div class="account-menu" id="accountMenu">
+            <button id="themeToggleText">Toggle dark mode</button>
+            <button>Login to your account</button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <button class="visibility" id="visibilityButton">
+            <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><path d="M5 11h14v9H5z"/></svg>
+            <svg viewBox="0 0 24 24" class="chevron"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="visibility-menu" id="visibilityMenu">
+            <button data-visibility="private">
+              <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><path d="M5 11h14v9H5z"/></svg>
+              Private
+              <span class="check">✓</span>
+            </button>
+            <button data-visibility="public">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/></svg>
+              Public
+            </button>
+          </div>
+          <label class="customer-picker">
+            <span>Customer</span>
+            <select id="customerSelect" aria-label="Demo customer"></select>
+          </label>
+        </header>
+
+        <section class="chat-shell" id="chatShell">
+          <div class="empty-state" id="emptyState">
+            <h1>What can I help with?</h1>
+            <p>Ask about orders, returns, shipments, refunds, or account state.</p>
+            <div class="suggestions">
+              <button>Where is my latest order?</button>
+              <button>Can I return an item that does not fit?</button>
+              <button>What products are final sale?</button>
+              <button>My package says delivered, but I cannot find it.</button>
+            </div>
+          </div>
+          <div class="messages" id="messages"></div>
+        </section>
+
+        <form class="composer" id="composer">
+          <textarea id="prompt" rows="3" placeholder="Ask anything..." aria-label="Message"></textarea>
+          <div class="composer-bar">
+            <button type="button" class="model-pill" id="modelButton">
+              <span class="model-dot"></span>
+              <span id="modelLabel">Loading model...</span>
+            </button>
+            <button type="submit" class="send" id="sendButton" aria-label="Send">
+              <svg viewBox="0 0 24 24"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+            </button>
+          </div>
+          <div class="model-menu" id="modelMenu">
+            <label class="search">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+              <input id="modelSearch" placeholder="Search models..." />
+            </label>
+            <div class="kicker">Available</div>
+            <div id="modelList"></div>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script src="/static/app.js" type="module"></script>
+  </body>
+</html>
