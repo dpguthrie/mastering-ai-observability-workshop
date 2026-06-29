@@ -32,20 +32,6 @@ async def forbidden_tools_avoided(input: Any, output: dict[str, Any], expected: 
     return 0.0 if any(tool in tools_called for tool in forbidden) else 1.0
 
 
-async def tool_calls_succeeded(
-    input: Any | None = None,
-    output: Any | None = None,
-    expected: dict[str, Any] | None = None,
-    trace: Any | None = None,
-) -> float:
-    del input, output, expected
-    if trace is None:
-        return 1.0
-
-    tool_spans = await trace.get_spans(span_type=["tool"])
-    return 0.0 if any(getattr(span, "error", None) for span in tool_spans) else 1.0
-
-
 def required_evidence_mentioned(input: Any, output: dict[str, Any], expected: dict[str, Any]) -> float:
     mentions = [str(value).lower() for value in expected.get("must_mention", [])]
     if not mentions:
@@ -175,6 +161,59 @@ Expected behavior, if provided:
 """
 
 
+TOOL_USE_QUALITY_PROMPT = """
+You are a strict binary LLM judge for customer-support tool use.
+
+Use private step-by-step reasoning before choosing, but do not expose the chain
+of thought. If a rationale is requested, give only a short factual reason.
+
+Be harsh. Return PASS only when the assistant called the necessary tools, used
+the right identifiers and arguments, called tools in a sensible order, avoided
+unsupported state-changing actions, avoided needless repeated calls, and used
+tool evidence accurately in the final answer. Return FAIL for missing lookups,
+wrong identifiers, wrong order, unsupported refunds, unsupported credits,
+unsupported returns, avoidable duplicate tool calls, or final answers that are
+not grounded in tool results.
+
+Choices:
+PASS - the assistant used tools correctly and in a sensible order.
+FAIL - the assistant made a material tool-use mistake.
+
+Few-shot examples:
+
+Example 1:
+Conversation: The user asks where an order is. The assistant looks up the
+order, checks shipment status for the same order, and explains the current
+carrier status from the tool evidence.
+Judgment: PASS.
+
+Example 2:
+Conversation: The user asks for a refund because a package is late. The
+assistant requests a refund before checking shipment, payment, or evidence.
+Judgment: FAIL.
+
+Example 3:
+Conversation: The user asks whether a final-sale item can be returned. The
+assistant looks up the order and item, sees final sale, and does not initiate a
+return.
+Judgment: PASS.
+
+Example 4:
+Conversation: The user asks one shipment question. The assistant repeats the
+same lookup several times with the same arguments and gives no new evidence.
+Judgment: FAIL.
+
+Now evaluate this conversation. Treat tool calls, tool arguments, and tool
+results in the thread as evidence.
+
+Conversation:
+{thread}
+
+Expected behavior, if provided:
+{expected}
+"""
+
+
 async def _judge_thread(
     prompt_template: str,
     input: Any,
@@ -204,9 +243,7 @@ async def _judge_thread(
     )
 
 
-async def support_resolution(
-    input: Any, output: dict[str, Any], expected: dict[str, Any] | None, trace: Any
-) -> Score:
+async def support_resolution(input: Any, output: dict[str, Any], expected: dict[str, Any] | None, trace: Any) -> Score:
     return await _judge_thread(SUPPORT_RESOLUTION_PROMPT, input, output, expected, trace, "support_resolution")
 
 
@@ -216,11 +253,15 @@ async def communication_quality(
     return await _judge_thread(COMMUNICATION_QUALITY_PROMPT, input, output, expected, trace, "communication_quality")
 
 
+async def tool_use_quality(input: Any, output: dict[str, Any], expected: dict[str, Any] | None, trace: Any) -> Score:
+    return await _judge_thread(TOOL_USE_QUALITY_PROMPT, input, output, expected, trace, "tool_use_quality")
+
+
 SCORERS = [
     required_tools_called,
     forbidden_tools_avoided,
-    tool_calls_succeeded,
     required_evidence_mentioned,
     support_resolution,
     communication_quality,
+    tool_use_quality,
 ]

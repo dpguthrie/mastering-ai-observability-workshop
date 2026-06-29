@@ -6,9 +6,15 @@ contains the custom Topics facet prompt.
 ## 0. Prepare Braintrust
 
 1. Create or open a Braintrust organization.
+  - If creating an organization, navigate to https://braintrust.dev/signup and follow instructions
+  - If you already have an organization, open your organization selector in the top-left and select "Create Organization"
 2. Create a project named `AIE-Workshop`.
+  - Open your project selector in the left sidebar and select "Create Project"
 3. Add an AI provider key in Braintrust settings.
+  - Click Settings in the left sidebar then select "AI Providers" in the top-left inner left sidebar
 4. Create a Braintrust API key for your `.env` file.
+  - Still in the settings, underneath the Organization section, select "API keys" and "+ API Key"
+  - **Save this for a later step**
 
 Keep API keys private. Do not paste keys into chat, slides, or committed files.
 
@@ -19,6 +25,23 @@ Clone the repo and install dependencies:
 ```bash
 git clone https://github.com/braintrustdata/mastering-ai-observability-workshop
 cd mastering-ai-observability-workshop
+```
+
+If you don't already have `uv` installed on your machine, follow these instructions:
+
+**Mac/Linux**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows**
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Then install the dependencies for this repo:
+
+```bash
 uv sync --extra dev
 ```
 
@@ -28,13 +51,14 @@ Create and edit your environment file:
 cp .env.example .env
 ```
 
-Set at least:
+Set at least in .env:
 
 ```bash
 BRAINTRUST_API_KEY=<your Braintrust API key>
-BRAINTRUST_ORG_NAME=<your Braintrust org>
-BRAINTRUST_PROJECT=AIE-Workshop
 AGENT_DEFAULT_MODEL=<model available through Braintrust Gateway>
+
+# Only set this if you did not create an "AIE-Workshop" project
+BRAINTRUST_PROJECT=AIE-Workshop
 ```
 
 The model must support tool/function calling. `ADDITIONAL_MODELS` is optional
@@ -66,6 +90,9 @@ Initialize the CLI:
 
 ```bash
 bt init
+
+# Optional - set up your coding agent with skills to use the bt cli
+bt setup skills --local --agent codex # One of claude, codex, copilot, cursor, gemini, opencode, qwen
 ```
 
 Select the org and project you created above.
@@ -115,7 +142,7 @@ uv run python scripts/run_chat_ui.py
 ```
 
 Open <http://127.0.0.1:8765>. Choose a seeded customer, choose a model, and ask
-one support question.
+one support question.  Once you've done that, navigate to Braintrust and look at the log that was just created.
 
 ## 4. Run Baseline Evals
 
@@ -134,6 +161,9 @@ baseline before using traces and Topics to find improvement candidates.
 To compare a different model for one eval:
 
 ```bash
+make eval AGENT_DEFAULT_MODEL=gpt-4o
+
+# or the direct command
 AGENT_DEFAULT_MODEL=gpt-4o bt eval evals/eval_support_agent.py --no-input
 ```
 
@@ -141,9 +171,62 @@ AGENT_DEFAULT_MODEL=gpt-4o bt eval evals/eval_support_agent.py --no-input
 
 Topics and online scoring are two ways to generate signal from traces:
 
-- Topics groups repeated patterns across many conversations.
 - Online scoring attaches scorer outputs to traces so you can filter, review,
   and measure behavior over time.
+- Topics groups repeated patterns across many conversations.
+
+### Scorer Definitions
+
+Push the workshop scorer definitions into Braintrust:
+
+```bash
+make push-scorers
+
+# or the direct command
+uv run bt functions push evals/braintrust_functions.py --if-exists replace --no-input --env-file .env
+```
+
+This creates three code-based scorers and three LLM judge scorers:
+
+- `Required tools called`: eval-oriented, needs `expected.must_use`
+- `Forbidden tools avoided`: eval-oriented, needs `expected.must_not_use`
+- `Required evidence mentioned`: eval-oriented, needs `expected.must_mention`
+- `Support resolution`: strict binary LLM judge with chain-of-thought enabled
+- `Tool use quality`: strict binary LLM judge for tool choice, arguments, and order
+- `Communication quality`: strict binary LLM judge with chain-of-thought enabled
+
+Pushing scorers only creates the scorer definitions. It does not enable online
+scoring automation.
+
+The LLM judges follow the workshop best practices: binary PASS/FAIL scoring,
+harsh rubrics, explicit few-shot examples, and an optional separate scoring
+model via `JUDGE_MODEL`.
+
+Direct scorer push command for Mac/Linux:
+
+If your CLI session is not already scoped to the correct org, add
+`--org "<your Braintrust org>"` to the `bt functions push` command.
+
+### Online Scoring Automation
+
+Configure online scoring automation in the Braintrust UI during the workshop so
+attendees can see the selected scorers and sampling rate:
+
+1. In the logs page, Open Automations in the top-right.
+2. Create an online scoring automation for project logs.
+3. Select `Tool use quality` for the first demo.
+4. Choose the sampling rate and save the automation.
+
+For `Tool use quality`, start with a small sample rate during the demo. Use
+`100%` only for code-based scorers on the small workshop dataset. If `Support
+resolution`, `Tool use quality`, or `Communication quality` has a sampling rate
+above `0%`, each sampled trace runs an LLM judge and can incur model compute
+cost.
+
+Do not enable `Required tools called`, `Forbidden tools avoided`, or `Required
+evidence mentioned` on raw production-like logs unless those traces include
+expected behavior fields. They are primarily useful in evals and curated
+datasets.
 
 ### Topics Automation
 
@@ -156,9 +239,13 @@ what is being configured:
    [SUPPORT_WORKFLOW_ISSUE_FACET.md](SUPPORT_WORKFLOW_ISSUE_FACET.md).
 4. Use the facet name `Support workflow issue` unless the facilitator gives you
    a different name.
-5. Set the Topics scope to conversation-level grouping if available:
-   group by `metadata.conversation_id`.
-6. Enable backfill/apply-to-existing-traces when importing shared traces.
+5. Configure your topics automation settings:
+  - Don't add any filters
+  - Sampling rate can stay at 100%
+  - Topic window = Leave as is
+  - Idle time = 10
+
+#### Optional CLI
 
 The Topics CLI path is useful after the custom facet exists, or when you want a
 repeatable setup command. It configures a short `30s` idle time so imported
@@ -193,75 +280,6 @@ If your custom facet name differs:
 ```bash
 make configure-topics TOPICS_SUPPORT_FACET="Support Workflow Issues"
 ```
-
-### Scorer Definitions
-
-Push the workshop scorer definitions into Braintrust:
-
-```bash
-make push-scorers
-```
-
-This creates four code-based scorers and two LLM judge scorers:
-
-- `Tool calls succeeded`: production-log-safe, does not need `expected`
-- `Required tools called`: eval-oriented, needs `expected.must_use`
-- `Forbidden tools avoided`: eval-oriented, needs `expected.must_not_use`
-- `Required evidence mentioned`: eval-oriented, needs `expected.must_mention`
-- `Support resolution`: strict binary LLM judge with chain-of-thought enabled
-- `Communication quality`: strict binary LLM judge with chain-of-thought enabled
-
-Pushing scorers only creates the scorer definitions. It does not enable online
-scoring automation.
-
-The LLM judges follow the workshop best practices: binary PASS/FAIL scoring,
-harsh rubrics, explicit few-shot examples, and an optional separate scoring
-model via `JUDGE_MODEL`.
-
-Direct scorer push command for Mac/Linux:
-
-```bash
-PYTHONPATH=.:src \
-UV_CACHE_DIR=.uv-cache \
-UV_PROJECT_ENVIRONMENT=.workshop_private/push-venv \
-uv run --python 3.13 --extra dev bt functions push evals/braintrust_functions.py \
-  --if-exists replace \
-  --no-input \
-  --env-file .env \
-  --project "AIE-Workshop"
-```
-
-If your CLI session is not already scoped to the correct org, add
-`--org "<your Braintrust org>"` to the `bt functions push` command.
-
-PowerShell equivalent:
-
-```powershell
-$env:PYTHONPATH = ".;src"
-$env:UV_CACHE_DIR = ".uv-cache"
-$env:UV_PROJECT_ENVIRONMENT = ".workshop_private/push-venv"
-uv run --python 3.13 --extra dev bt functions push evals/braintrust_functions.py --if-exists replace --no-input --env-file .env --project "AIE-Workshop"
-```
-
-### Online Scoring Automation
-
-Configure online scoring automation in the Braintrust UI during the workshop so
-attendees can see the selected scorers and sampling rate:
-
-1. Open Automations.
-2. Create an online scoring automation for project logs.
-3. Select `Tool calls succeeded` for the first demo.
-4. Choose the sampling rate and save the automation.
-
-Use `100%` only for code-based scorers on the small workshop dataset. Keep LLM
-judge sampling at `0%` until you intentionally want judges to run on new traces.
-If `Support resolution` or `Communication quality` has a sampling rate above
-`0%`, each sampled trace runs an LLM judge and can incur model compute cost.
-
-Do not enable `Required tools called`, `Forbidden tools avoided`, or `Required
-evidence mentioned` on raw production-like logs unless those traces include
-expected behavior fields. They are primarily useful in evals and curated
-datasets.
 
 ## 6. Import Shared Traces
 
@@ -302,13 +320,6 @@ New-Item -ItemType Directory -Force .workshop_private/imported-traces
 curl.exe -L "https://aiewf-braintrust-workshop-bucket.s3.us-east-1.amazonaws.com/workshop/aiewf-sample-traces.tar.gz" -o .workshop_private/imported-traces/aiewf-sample-traces.tar.gz
 tar -xzf .workshop_private/imported-traces/aiewf-sample-traces.tar.gz -C .workshop_private/imported-traces
 bt sync push "project_logs:AIE-Workshop" --in ".workshop_private/imported-traces/aiewf-sample-traces/data" --env-file .env --project "AIE-Workshop" --fresh --no-input
-```
-
-The default `TRACE_BUNDLE_URL` is set in `.env.example` and in the Makefile. If
-the facilitator provides a replacement bundle, override it inline:
-
-```bash
-make import-sample-traces TRACE_BUNDLE_URL="<provided aiewf-sample-traces.tar.gz URL>"
 ```
 
 The compressed download is about 2 MB. The uncompressed JSONL uploaded to
@@ -380,9 +391,9 @@ The eval invokes scorers from `evals/scorers.py`:
 
 - `required_tools_called`
 - `forbidden_tools_avoided`
-- `tool_calls_succeeded`
 - `required_evidence_mentioned`
 - `support_resolution`
+- `tool_use_quality`
 - `communication_quality`
 
 To promote a trace pattern into eval coverage:
@@ -403,7 +414,6 @@ delete the old dataset first.
 
 6. Add a custom scorer only if the scorers pushed in step 5 do not cover the
    behavior.
-7. Rerun `make eval`.
 
 ## 10. Improve The Agent
 
@@ -445,18 +455,7 @@ eval coverage, and make a narrow agent change. The automated flywheel asks a
 coding agent to perform that same loop with the Braintrust skill as its
 operating instructions.
 
-Facilitator framing:
-
-```text
-We just walked the loop by hand. Now we are going to hand the loop to a coding
-agent, but not as magic. The agent still has to ground itself in Braintrust
-traces, create or update eval coverage, make a narrow change, and prove the
-change with eval results.
-```
-
-Use the flywheel after you have at least one trace-backed improvement target
-from Logs, Topics, or an eval failure. Do not ask the coding agent to improve
-the whole app at once.
+### Install
 
 The skill repo is agent-agnostic: the same `SKILL.md` can be used by multiple
 coding agents. Prefer a local project install during the workshop so attendees
@@ -517,45 +516,17 @@ The important requirement is that the coding agent reads the Braintrust
 agent-auto-improvement skill before it starts inspecting traces or changing
 code.
 
-If you want to give the coding agent a review queue, create draft dataset rows
-from recent traces:
+### Flywheel in Action
 
-```bash
-make draft-cases
-```
-
-This runs `pipelines/trace_to_eval_drafts.py`, which is a small Braintrust
-dataset pipeline:
-
-1. Source recent traces from the `AIE-Workshop` project.
-2. Transform each trace into one draft dataset row with `input`, `expected`,
-   and `metadata`.
-3. Write the rows to the `support-flywheel-draft-cases` dataset.
-
-These rows intentionally contain the visible conversation and empty
-expected-behavior fields. They are starting points for review, not ground truth.
-
-Useful overrides:
-
-```bash
-make draft-cases PIPELINE_LIMIT=25 PIPELINE_WINDOW=3d
-make draft-cases DRAFT_DATASET="support-delay-draft-cases"
-```
-
-Use a narrow request that names the Braintrust project and the behavior to
-improve:
+Make a request with the flywheel skill:
 
 ```text
 Use the Braintrust agent-auto-improvement skill to improve the support agent
 from recent Braintrust traces.
 
-Project: AIE-Workshop
-Target behavior: shipment-delay support responses
-
 Inspect recent traces, identify repeated failures, create or update focused eval
-coverage, and propose the smallest prompt/tool/runtime change that improves the
-eval. Do not promote raw production traces directly to ground truth; keep a
-human review step for expected behavior.
+coverage, and propose a prompt/tool/runtime change that improves the
+eval.
 ```
 
 The coding agent should produce a reviewable change, not just an explanation.

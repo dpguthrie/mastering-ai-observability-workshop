@@ -47,7 +47,7 @@ create-eval-dataset:
 	bt datasets create "$(EVAL_DATASET)" --file evals/cases.jsonl --env-file .env $(BT_ORG_FLAG) --project "$(BT_PROJECT)" --no-input
 
 push-scorers:
-	PYTHONPATH=.:src UV_CACHE_DIR=.uv-cache UV_PROJECT_ENVIRONMENT=.workshop_private/push-venv uv run --python 3.13 --extra dev bt functions push evals/braintrust_functions.py --if-exists replace --no-input --env-file .env $(BT_ORG_FLAG) --project "$(BT_PROJECT)"
+	uv run bt functions push evals/braintrust_functions.py --if-exists replace --no-input --env-file .env $(BT_ORG_FLAG)
 
 draft-cases:
 	bt datasets pipeline run pipelines/trace_to_eval_drafts.py --env-file .env $(BT_ORG_FLAG) --project "$(BT_PROJECT)" --source-project "$(BT_PROJECT)" --target-project "$(BT_PROJECT)" --target-dataset "$(DRAFT_DATASET)" --window "$(PIPELINE_WINDOW)" --limit "$(PIPELINE_LIMIT)" $(PIPELINE_SOURCE_FILTER_FLAG) --no-input
@@ -73,7 +73,7 @@ download-sample-traces:
 	tar -xzf "$(TRACE_IMPORT_DIR)/aiewf-sample-traces.tar.gz" -C "$(TRACE_IMPORT_DIR)"
 
 import-sample-traces: download-sample-traces
-	bt sync push "project_logs:$(BT_PROJECT)" --in "$(TRACE_IMPORT_DIR)/$(TRACE_IMPORT_NAME)/data" --env-file .env $(BT_ORG_FLAG) --project "$(BT_PROJECT)" --fresh --no-input
+	bt sync push "project_logs:$(BT_PROJECT)" --in "$(TRACE_IMPORT_DIR)/$(TRACE_IMPORT_NAME)/data" --env-file .env $(BT_ORG_FLAG) --project "$(BT_PROJECT)" --no-input
 
 test:
 	uv run pytest

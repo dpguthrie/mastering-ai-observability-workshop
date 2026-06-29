@@ -11,20 +11,20 @@ try:
         BINARY_CHOICE_SCORES,
         COMMUNICATION_QUALITY_PROMPT,
         SUPPORT_RESOLUTION_PROMPT,
+        TOOL_USE_QUALITY_PROMPT,
         forbidden_tools_avoided,
         required_evidence_mentioned,
         required_tools_called,
-        tool_calls_succeeded,
     )
 except ImportError:
     from evals.scorers import (
         BINARY_CHOICE_SCORES,
         COMMUNICATION_QUALITY_PROMPT,
         SUPPORT_RESOLUTION_PROMPT,
+        TOOL_USE_QUALITY_PROMPT,
         forbidden_tools_avoided,
         required_evidence_mentioned,
         required_tools_called,
-        tool_calls_succeeded,
     )
 
 PROJECT_NAME = os.getenv("BRAINTRUST_PROJECT", "AIE-Workshop")
@@ -44,13 +44,6 @@ class EvidenceScorerParams(BaseModel):
     input: Any | None = None
     output: dict[str, Any]
     expected: dict[str, Any]
-
-
-class OnlineTraceScorerParams(BaseModel):
-    input: Any | None = None
-    output: Any | None = None
-    expected: dict[str, Any] | None = None
-    trace: Any
 
 
 class JudgeScorerParams(BaseModel):
@@ -90,16 +83,6 @@ required_evidence_mentioned_scorer = project.scorers.create(
     metadata={"__pass_threshold": 1.0},
 )
 
-tool_calls_succeeded_scorer = project.scorers.create(
-    name="Tool calls succeeded",
-    slug="tool-calls-succeeded",
-    description="Checks whether tool calls in a trace completed without recorded tool errors.",
-    parameters=OnlineTraceScorerParams,
-    handler=tool_calls_succeeded,
-    if_exists="replace",
-    metadata={"__pass_threshold": 1.0, "online_safe": True},
-)
-
 support_resolution_scorer = project.scorers.create(
     name="Support resolution",
     slug="support-resolution",
@@ -108,6 +91,26 @@ support_resolution_scorer = project.scorers.create(
         {
             "role": "user",
             "content": SUPPORT_RESOLUTION_PROMPT.replace("{thread}", "{{thread}}").replace(
+                "{expected}", "{{expected}}"
+            ),
+        }
+    ],
+    model=JUDGE_MODEL,
+    use_cot=True,
+    choice_scores=BINARY_CHOICE_SCORES,
+    if_exists="replace",
+    metadata={"__pass_threshold": 1.0, "judge_model": JUDGE_MODEL},
+    parameters=JudgeScorerParams,
+)
+
+tool_use_quality_scorer = project.scorers.create(
+    name="Tool use quality",
+    slug="tool-use-quality",
+    description="LLM judge for whether tool calls were necessary, correctly ordered, and grounded the answer.",
+    messages=[
+        {
+            "role": "user",
+            "content": TOOL_USE_QUALITY_PROMPT.replace("{thread}", "{{thread}}").replace(
                 "{expected}", "{{expected}}"
             ),
         }

@@ -3,7 +3,7 @@ name = "aiewf-support-flywheel"
 version = "0.1.0"
 description = "AI Engineer World's Fair workshop: trace-backed agent improvement flywheel."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10,<3.14"
 dependencies = [
   "alive-progress>=3.2",
   "braintrust>=0.2.0",
@@ -29,7 +29,7 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 120
-target-version = "py311"
+target-version = "py310"
 extend-exclude = [".uv-cache", ".workshop_private"]
 
 [tool.ruff.lint]

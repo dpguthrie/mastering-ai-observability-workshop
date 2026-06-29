@@ -11,10 +11,6 @@ Create this as a Braintrust Topics custom facet from the UI, not with
 - Exclusion regex: `^NONE\.?$`
 - Apply to existing traces: enable this when backfilling a recent simulator run
 
-For conversation-level Topics, set the Topics automation scope to `Group` and
-group by `metadata.conversation_id`. Use `First trace in group` for completed
-simulator runs.
-
 ## Prompt
 
 ```text
